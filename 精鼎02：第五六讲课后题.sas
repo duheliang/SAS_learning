@@ -43,8 +43,8 @@ DATA VS;
 ;
 RUN;
 
-/* 要求
-将每次访视缺失值用LOCF法进行填补，计算每次访视与基线的差值chg，将每位受试者第一次访视的chg置空，并按如下标准进行分类：
+/* Ҫ��
+��ÿ�η���ȱʧֵ��LOCF�������������ÿ�η�������ߵĲ�ֵchg����ÿλ�����ߵ�һ�η��ӵ�chg�ÿգ��������±�׼���з��ࣺ
 chg	     chgcat
 <=-5	 Very good
 -5<-<=0	 good
@@ -52,7 +52,7 @@ chg	     chgcat
 >5	     worse */
 
 
-/* LOCF填补 */
+/* LOCF� */
 data VS1;
   set VS;
   by subject visit;
@@ -63,7 +63,7 @@ data VS1;
   rename newvalue=value;
 run;
 
-/* 确定基线 */
+/* ȷ������ */
 proc sort data=DM1 out=DM2;
   by subject;
 run;
@@ -72,13 +72,13 @@ proc sort data=VS1 out=VS2;
   by subject visit;
 run;
 
-data VS3;              *给药前访视观�;
+data VS3;              *��ҩǰ���ӹ�;
   merge DM2 VS2;
   by subject;
   if visitdt<firstdt and value^=.;
 run;
 
-data baseline;         *确定基线;
+data baseline;         *ȷ������;
   set VS3;
   by subject visit;
   if last.subject;
@@ -86,7 +86,7 @@ data baseline;         *确定基线;
   rename value=value_base;
 Run;
 
-/* 将基线merge回去，计算差值并分类 */
+/* ������merge��ȥ�������ֵ������ */
 data VS4;
   merge VS2 baseline;
   by subject;
